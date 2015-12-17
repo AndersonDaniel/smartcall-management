@@ -1,0 +1,34 @@
+/*myDataRef.set([
+	{
+		name: 'רננים',
+		appID: 1,
+		tenantID: 2,
+		secID: 3,
+		isPerm: false,
+		agentExt: '043-2'
+	},
+	{
+		name: 'גלילות',
+		appID: 1,
+		tenantID: 2,
+		secID: 3,
+		isPerm: true,
+		agentExt: '043-2'
+	},
+	{
+		name: 'כפס',
+		appID: 1,
+		tenantID: 2,
+		secID: 3,
+		isPerm: false,
+		agentExt: '043-2'
+	},
+	{
+		name: 'י-ם',
+		appID: 1,
+		tenantID: 2,
+		secID: 3,
+		isPerm: false,
+		agentExt: '043-2'
+	},
+]);*/

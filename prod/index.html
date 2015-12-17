@@ -1,0 +1,112 @@
+﻿<!DOCTYPE HTML>
+<html ng-app="smartcall">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=0.3">
+		<title>ניהול לקוחות</title>
+		
+		<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.0/angular.min.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.2.0-rc2/css/bootstrap-rtl.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
+		<link href='https://fonts.googleapis.com/css?family=Arimo&subset=hebrew,latin' rel='stylesheet' type='text/css'>
+		
+		<link rel="stylesheet" href="index.css">
+		<script src="index.js"></script>
+		
+	</head>
+	<body ng-controller="mainController as main">
+		<div class="container-fluid">
+			<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
+
+			<!-- Customer modal -->
+			<div id="customerModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" ng-click="main.modal=false">&times;</button>
+					<h4 class="modal-title">{{main.modalRole}} לקוח</h4>
+				  </div>
+				  <div class="modal-body">
+					<div>
+						<p>שם לקוח</p>
+						<input type="text" class="form-control" placeholder="שם הלקוח" ng-model="main.editCustomer.name" />
+						<p>App ID</p>
+						<input type="text" class="form-control" placeholder="App ID" ng-model="main.editCustomer.appID" />
+						<p>Tenant ID</p>
+						<input type="text" class="form-control" placeholder="Tenant ID" ng-model="main.editCustomer.tenantID" />
+						<p>Security ID</p>
+						<input type="text" class="form-control" placeholder="Security ID" ng-model="main.editCustomer.secID" />
+						<input type="checkbox" ng-model="main.editCustomer.isPerm"> לקוח קבוע?</input>
+						<p>Agent extension</p>
+						<input type="text" class="form-control" placeholder="Agent extension ID" ng-model="main.editCustomer.agentExt" ng-disabled="main.editCustomer.isPerm" />
+					</div>
+				  </div>
+				  <div class="alert alert-danger" ng-show="main.editError">
+					<p><strong>שגיאה!</strong></p>
+					<p>{{main.editError}}</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="main.modal=false">ביטול</button>
+					<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="main.finalize()" ng-disabled="main.editError">אישור</button>
+				  </div>
+				</div>
+
+			  </div>
+			</div>
+			
+			
+			
+			<header>
+				<h1>ניהול לקוחות - סמרט קול</h1>
+			</header>
+			<article>
+				<div>
+					<table class="table table-hover table-responsive">
+						<thead>
+							<th>לקוח</th>
+							<th>App ID</th>
+							<th>Tenant ID</th>
+							<th>Security ID</th>
+							<th>קבוע?</th>
+							<th>Agent Extension</th>
+							<th></th>
+							<th></th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="customer in main.customers">
+								<td>{{customer.name}}</td>
+								<td>{{customer.appID}}</td>
+								<td>{{customer.tenantID}}</td>
+								<td>{{customer.secID}}</td>
+								<td><span class="glyphicon" ng-class="customer.isPerm ? 'glyphicon-ok' : 'glyphicon-remove'"></span></td>
+								<td>{{customer.agentExt}}</td>
+								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#customerModal" ng-click="main.startEditCustomer(customer)"><span class="glyphicon glyphicon-edit"></span></div></td>
+								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeCustomer($index)"><span class="glyphicon glyphicon-erase"></span></div></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="text-center">
+						<div class="btn btn-success" data-toggle="modal" data-target="#customerModal" ng-click="main.startAddCustomer()">הוסף לקוח</div>
+					</div>
+				</div>				
+				
+			</article>
+			<footer class="footer">
+				<div>&copy גדי ודניאל</div>
+			</footer>
+		</div>
+		
+
+	</body>
+</html>
+

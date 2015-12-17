@@ -1,0 +1,37 @@
+body {
+	background: rgb(102, 153, 255);
+	font-family: "Arimo", "Tahoma";
+}
+
+.container-fluid {
+	color: rgb(240, 240, 240);
+}
+
+header {
+	text-shadow: 2px 2px #111111;
+}
+
+article  div{
+	/*background: rgb(153, 204, 255);*/
+	font-size: 1.5em;
+}
+
+.row div, th, td, footer {
+	text-align: center;
+}
+
+footer {
+	font-size: 1.5em;
+	position: absolute;
+	bottom: 0;
+	height: 60px;
+	width: 99%;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: rgb(112, 163, 255);
+}
+
+.modal-content {
+	background: rgba(204, 204, 255, 0.8);
+}
