@@ -4,3 +4,4 @@
 	appID מספר
 	tenantID מספר
 	AgentExt מספר טלפון?
+לוגים
