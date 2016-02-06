@@ -1,5 +1,5 @@
-import SimpleHTTPServer, SocketServer
+import http.server, socketserver
 
-httpd = SocketServer.TCPServer(("", 8080), SimpleHTTPServer.SimpleHTTPRequestHandler)
-
+server_address = ('', 8000)
+httpd = http.server.HTTPServer(server_address, http.server.SimpleHTTPRequestHandler)
 httpd.serve_forever()

@@ -1,11 +1,30 @@
-﻿smartApp = angular.module("smartcall", []);
+﻿smartApp = angular.module('smartcall', ['ngRoute']);
+
 smartApp.controller('mainController', ['$scope', function($scope) {
-	var myDataRef = new Firebase("https://smartcall-management.firebaseio.com/");
 	var self = this;
+	
+	var myDataRef = new Firebase("https://smartcall-management.firebaseio.com/clients");
+	var myUsersRef = new Firebase("https://smartcall-management.firebaseio.com/users");
+	
+	function authDataCallback(authData) {
+	  self.authData = authData;
+	  if (authData) {
+		console.log("User " + authData.uid + " is logged in with " + authData.provider);
+		myUsersRef.child(authData.uid).set(authData.google.email);
+	  } else {
+		window.location.pathname = window.location.pathname.replace("index.html", "login.html");
+	  }
+	}
+	
+	myDataRef.onAuth(authDataCallback);
 	
 	myDataRef.on('value', function(snapshot) {
 		$scope.$apply(function() {
-			self.customers = snapshot.val();
+			if (snapshot.val()) {
+				self.customers = snapshot.val();
+			} else {
+				self.customers = [];
+			}
 		});
 	});
 	
@@ -48,7 +67,6 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	};
 	
 	self.validateEditCustomer = function() {
-		//console.log(self.editCustomer.name);
 		if (!self.editCustomer.name) {
 			return "יש למלא שם לקוח";
 		}
@@ -65,5 +83,9 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 			return "עבור לקוח לא קבוע יש למלא מספר נציג";
 		}
 	};
+	
+	self.logout = function() {
+			myDataRef.unauth();
+	}
 }]);
 

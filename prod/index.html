@@ -9,6 +9,8 @@
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.0/angular.min.js"></script>
 		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-rc.0/angular-route.min.js"></script>
+		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.2.0-rc2/css/bootstrap-rtl.css">
 		
@@ -18,7 +20,7 @@
 		
 		<link href='https://fonts.googleapis.com/css?family=Arimo&subset=hebrew,latin' rel='stylesheet' type='text/css'>
 		
-		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="all.css">
 		<script src="index.js"></script>
 		
 	</head>
@@ -64,12 +66,14 @@
 			  </div>
 			</div>
 			
-			
-			
 			<header>
 				<h1>ניהול לקוחות - סמרט קול</h1>
 			</header>
 			<article>
+				<h4>
+					שלום, {{main.authData.google.email}}!
+					<div class="btn btn-info" ng-click="main.logout()">התנתק</div>
+				</h4>
 				<div>
 					<table class="table table-hover table-responsive">
 						<thead>
@@ -105,8 +109,6 @@
 				<div>&copy גדי ודניאל</div>
 			</footer>
 		</div>
-		
-
 	</body>
 </html>
 
