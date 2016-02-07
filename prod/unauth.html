@@ -21,20 +21,19 @@
 		<link href='https://fonts.googleapis.com/css?family=Arimo&subset=hebrew,latin' rel='stylesheet' type='text/css'>
 		
 		<link rel="stylesheet" href="all.css">
-		<script src="login.js"></script>
+		<script src="unauth.js"></script>
 		
 	</head>
-	<!--<body ng-controller="mainController as main">
-		
-	</body>-->
-	<body ng-controller="loginController as login">
+	<body ng-controller="unauthController as unauth">
 		<div class="container-fluid">
 			<h1>ניהול לקוחות - סמרט קול</h1>
 			<div class="text-center">
 				<h3>
-				אינך מחובר כעת
+				משתמש ללא הרשאות
 				</h3>
-				<div class="btn btn-info" ng-click="login.login()">התחבר</div>
+				<a href="login.html">
+					<div class="btn btn-info" ng-click="unauth.logout()">התנתק</div>
+				</a>
 				</div>
 		</div>
 	</body>
