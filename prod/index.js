@@ -81,8 +81,12 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	};
 	
 	self.removeCustomer = function(index) {
-		self.customers.splice(index, 1);
-		myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
+		bootbox.confirm("האם אתה בטוח שברצונך למחוק את הלקוח?", function(res) {
+			if (res) {
+				self.customers.splice(index, 1);
+				myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
+			}
+		});
 	};
 	
 	self.validateEditCustomer = function() {
