@@ -115,6 +115,13 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 			(!self.editCustomer.agentExt.match(/^(((\d+\-?)+)|(\d+))$/) || self.editCustomer.agentExt.length < 7)) {
 			return "מספר הנציג לא תקין";
 		}
+		if (self.editCustomer.isPrivate && !self.editCustomer.privateCode) {
+			return "עבור לקוח פרטי יש להגדיר קוד פרטי";
+		}
+		if (self.editCustomer.isPrivate && 
+			!self.editCustomer.privateCode.match(/^\d+$/)) {
+			return "קוד פרטי לא מספרי";
+		}
 		
 	};
 	

@@ -53,6 +53,9 @@
 						<input type="checkbox" ng-model="main.editCustomer.isPerm"> לקוח קבוע?</input>
 						<p>Agent extension</p>
 						<input type="text" class="form-control" placeholder="Agent extension ID" ng-model="main.editCustomer.agentExt" ng-disabled="main.editCustomer.isPerm" />
+						<input type="checkbox" ng-model="main.editCustomer.isPrivate">לקוח פרטי?</input>
+						<p>קוד פרטיות</p>
+						<input type="text" class="form-control" placeholder="Private code" ng-model="main.editCustomer.privateCode" ng-disabled="!main.editCustomer.isPrivate" />
 					</div>
 				  </div>
 				  <div class="alert alert-danger" ng-show="main.editError">
@@ -85,6 +88,7 @@
 							<th>Security ID</th>
 							<th>קבוע?</th>
 							<th>Agent Extension</th>
+							<th>קוד פרטי</th>
 							<th></th>
 							<th></th>
 						</thead>
@@ -96,6 +100,7 @@
 								<td>{{customer.secID}}</td>
 								<td><span class="glyphicon" ng-class="customer.isPerm ? 'glyphicon-ok' : 'glyphicon-remove'"></span></td>
 								<td>{{customer.agentExt}}</td>
+								<td>{{customer.privateCode}}</td>
 								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#customerModal" ng-click="main.startEditCustomer(customer)"><span class="glyphicon glyphicon-edit"></span></div></td>
 								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeCustomer($index)"><span class="glyphicon glyphicon-erase"></span></div></td>
 							</tr>
