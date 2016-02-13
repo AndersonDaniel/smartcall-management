@@ -37,21 +37,17 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 				  <div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" ng-click="main.modal=false">&times;</button>
-					<h4 class="modal-title">{{main.modalRole}} לקוח</h4>
+					<button type="button" class="close" data-dismiss="modal" ng-click="main.customerModal=false">&times;</button>
+					<h4 class="modal-title">{{main.customerModalRole}} לקוח</h4>
 				  </div>
 				  <div class="modal-body">
 					<div>
 						<p>שם לקוח</p>
 						<input type="text" class="form-control" placeholder="שם הלקוח" ng-model="main.editCustomer.name" />
-						<p>App ID</p>
+						<p>מזהה לקוח</p>
 						<input type="text" class="form-control" placeholder="App ID" ng-model="main.editCustomer.appID" />
-						<p>Tenant ID</p>
-						<input type="text" class="form-control" placeholder="Tenant ID" ng-model="main.editCustomer.tenantID" />
-						<p>Security ID</p>
-						<input type="text" class="form-control" placeholder="Security ID" ng-model="main.editCustomer.secID" />
 						<input type="checkbox" ng-model="main.editCustomer.isPerm"> לקוח קבוע?</input>
-						<p>Agent extension</p>
+						<p>מספר סוכן</p>
 						<input type="text" class="form-control" placeholder="Agent extension ID" ng-model="main.editCustomer.agentExt" ng-disabled="main.editCustomer.isPerm" />
 						<input type="checkbox" ng-model="main.editCustomer.isPrivate">לקוח פרטי?</input>
 						<p>קוד פרטיות</p>
@@ -63,7 +59,39 @@
 					<p>{{main.editError}}</p>
 				  </div>
 				  <div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="main.modal=false">ביטול</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="main.customerModal=false">ביטול</button>
+					<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="main.finalize()" ng-disabled="main.editError">אישור</button>
+				  </div>
+				</div>
+
+			  </div>
+			</div>
+			
+			<div id="tenantModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" ng-click="main.tenantModal=false">&times;</button>
+					<h4 class="modal-title">{{main.tenantModalRole}} שלוחה</h4>
+				  </div>
+				  <div class="modal-body">
+					<div>
+						<p>שם שלוחה</p>
+						<input type="text" class="form-control" placeholder="שם השלוחה" ng-model="main.editTenant.name" />
+						<p>מזהה שלוחה</p>
+						<input type="text" class="form-control" placeholder="מזהה השלוחה" ng-model="main.editTenant.tenantID" />
+						<p>מזהה בטיחות</p>
+						<input type="text" class="form-control" placeholder="מזהה בטיחות" ng-model="main.editTenant.secID" />
+					</div>
+				  </div>
+				  <div class="alert alert-danger" ng-show="main.editError">
+					<p><strong>שגיאה!</strong></p>
+					<p>{{main.editError}}</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="main.tenantModal=false">ביטול</button>
 					<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="main.finalize()" ng-disabled="main.editError">אישור</button>
 				  </div>
 				</div>
@@ -83,33 +111,55 @@
 					<table class="table table-hover table-responsive">
 						<thead>
 							<th>לקוח</th>
-							<th>App ID</th>
-							<th>Tenant ID</th>
-							<th>Security ID</th>
-							<th>קבוע?</th>
-							<th>Agent Extension</th>
+							<th>מזהה לקוח</th>
+							<th>מספר סוכן</th>
 							<th>קוד פרטי</th>
-							<th></th>
-							<th></th>
+							<th>&nbsp </th>
+							<th>&nbsp </th>
+							<th>&nbsp </th>
 						</thead>
 						<tbody>
-							<tr ng-repeat="customer in main.customers">
-								<td>{{customer.name}}</td>
+							<tr ng-repeat-start="customer in main.customers">
+								<td>
+									<span 
+										class="glyphicon" 
+										ng-class="main.expanded[customer.appID] ? 'glyphicon-menu-down' : 'glyphicon-menu-left'" 
+										ng-click="main.expand(customer.appID)"
+										ng-show="customer.tenants.length > 0">
+									</span>
+									<span>&nbsp {{customer.name}}</span>
+								</td>
 								<td>{{customer.appID}}</td>
-								<td>{{customer.tenantID}}</td>
-								<td>{{customer.secID}}</td>
-								<td><span class="glyphicon" ng-class="customer.isPerm ? 'glyphicon-ok' : 'glyphicon-remove'"></span></td>
 								<td>{{customer.agentExt}}</td>
 								<td>{{customer.privateCode}}</td>
+								<td><div class="btn btn-success" title="הוספת שלוחה" data-toggle="modal" data-target="#tenantModal" ng-click="main.startAddTenant(customer)"><span class="glyphicon glyphicon-plus"></span></div></td>
 								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#customerModal" ng-click="main.startEditCustomer(customer)"><span class="glyphicon glyphicon-edit"></span></div></td>
 								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeCustomer($index)"><span class="glyphicon glyphicon-erase"></span></div></td>
 							</tr>
+							<tr ng-show="main.expanded[customer.appID]" class="tenantHeader">
+								<td>&nbsp </td>
+								<td>&nbsp </td>
+								<td>שלוחה</td>
+								<td>מזהה</td>
+								<td>מזהה בטיחות</td>
+								<td>&nbsp </td>
+								<td>&nbsp </td>
+							</tr>
+							<tr ng-repeat-end ng-repeat="tenant in customer.tenants" ng-show="main.expanded[customer.appID]" class="tenantRow">
+								<td>&nbsp </td>
+								<td>&nbsp </td>
+								<td>{{tenant.name}}</td>
+								<td>{{tenant.tenantID}}</td>
+								<td>{{tenant.secID}}</td>
+								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#tenantModal" ng-click="main.startEditTenant(tenant)"><span class="glyphicon glyphicon-edit"></span></div></td>
+								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeTenant(customer, $index)"><span class="glyphicon glyphicon-erase"></span></div></td></td>
+							</tr>
 						</tbody>
 					</table>
-					<div class="text-center">
-						<div class="btn btn-success" data-toggle="modal" data-target="#customerModal" ng-click="main.startAddCustomer()">הוסף לקוח</div>
-					</div>
 				</div>				
+				<div class="text-center">
+						<div class="btn btn-success" data-toggle="modal" data-target="#customerModal" ng-click="main.startAddCustomer()">הוסף לקוח</div>
+				</div>
 				
 			</article>
 			<footer class="footer">

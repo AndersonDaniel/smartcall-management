@@ -48,27 +48,33 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	});
 	
 	$scope.$watchCollection('main.editCustomer', function(newValue, oldValue) {
-		if (self.modal) {
+		if (self.customerModal) {
 			self.editError = self.validateEditCustomer();
 		}
 	});
 	
+	$scope.$watchCollection('main.editTenant', function(newValue, oldValue) {
+		if (self.tenantModal) {
+			self.editError = self.validateEditTenant();
+		}
+	});
+	
 	self.startAddCustomer = function() {
-		self.modal = true;
-		self.modalRole = "הוספת";
+		self.customerModal = true;
+		self.customerModalRole = "הוספת";
 		self.finalize = self.addCustomer;
 		self.editCustomer = {};
 	}
 	
 	self.addCustomer = function() {
-		self.modal = false;
+		self.customerModal = false;
 		self.customers.push(self.editCustomer);
 		myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
 	};
 	
 	self.startEditCustomer = function(customer) {
-		self.modal = true;
-		self.modalRole = "עריכת";
+		self.customerModal = true;
+		self.customerModalRole = "עריכת";
 		self.finalize = self.finishEditCustomer(customer);
 		self.editCustomer = angular.copy(customer);
 	};
@@ -99,15 +105,6 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (!self.editCustomer.appID.match(/^\d+$/)) {
 			return "מספר האפליקציה לא מספרי";
 		}
-		if (!self.editCustomer.tenantID) {
-			return "יש למלא את מספר השלוחה";
-		}
-		if (!self.editCustomer.tenantID.match(/^\d+$/)) {
-			return "מספר השלוחה לא מספרי";
-		}
-		if (!self.editCustomer.secID) {
-			return "יש למלא מזהה בטיחות";
-		}
 		if (!self.editCustomer.isPerm && !self.editCustomer.agentExt) {
 			return "עבור לקוח לא קבוע יש למלא מספר נציג";
 		}
@@ -125,8 +122,74 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		
 	};
 	
+	self.startAddTenant = function(customer) {
+		self.tenantModal = true;
+		self.tenantModalRole = "הוספת";
+		self.finalize = self.addTenant(customer);
+		self.editTenant = {};
+	};
+	
+	self.addTenant = function(customer) {
+		return function() {
+			if (!customer.tenants) {
+				customer.tenants = [];
+			}
+			
+			customer.tenants.push(self.editTenant);
+			myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
+		};
+	};
+	
+	self.startEditTenant = function(tenant) {
+		self.tenantModal = true;
+		self.tenantModalRole = "עריכת";
+		self.finalize = self.finishEditTenant(tenant);
+		self.editTenant = angular.copy(tenant);
+	};
+	
+	self.finishEditTenant = function(tenant) {
+		return function() {
+			angular.copy(self.editTenant, tenant);
+			myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
+		};
+	};
+	
+	self.removeTenant = function(customer, nTenantIndex) {
+		bootbox.confirm("האם אתה בטוח שברצונך למחוק את השלוחה?", function(res) {
+			$scope.$apply(function () {
+				if (res) {
+					customer.tenants.splice(nTenantIndex, 1);
+					myDataRef.set(angular.fromJson(angular.toJson(self.customers)));
+					
+					if (customer.tenants.length == 0) {
+						self.expanded[customer.appID] = false;
+					}
+				}	
+			});			
+		});
+	};
+	
+	self.validateEditTenant = function() {
+		if (!self.editTenant.name) {
+			return "יש למלא שם שלוחה";
+		}
+		if (!self.editTenant.tenantID) {
+			return "יש למלא מזהה שלוחה";
+		}
+		if (!self.editTenant.tenantID.match(/^\d+$/)) {
+			return "מזהה השלוחה לא מספרי";
+		}
+		if (!self.editTenant.secID) {
+			return "יש למלא מזהה בטיחות";
+		}
+	};
+	
 	self.logout = function() {
 			myDataRef.unauth();
 	}
+	
+	self.expanded = {};
+	self.expand = function(appID) {
+		self.expanded[appID] = !self.expanded[appID];
+	};
 }]);
-
