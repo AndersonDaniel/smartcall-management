@@ -31,13 +31,18 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	myDataRef.onAuth(authDataCallback);
 	
 	myDataRef.on('value', function(snapshot) {
-		$scope.$apply(function() {
+		exec = function() {
 			if (snapshot.val()) {
 				self.customers = snapshot.val();
 			} else {
 				self.customers = [];
 			}
-		});
+		};
+		if (!$scope.$$phase) {
+			$scope.$apply(exec);
+		} else {
+			exec();
+		}
 	});
 	
 	myAuthUsersRef.on('value', function(snapshot) {
@@ -192,4 +197,62 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	self.expand = function(appID) {
 		self.expanded[appID] = !self.expanded[appID];
 	};
+	
+	var imgHolder = document.getElementById('imgHolder');
+	imgHolder.ondragover = function() {
+		this.className = "dragging";
+		return false;
+	};
+	imgHolder.ondragleave = function() {
+		this.className = "";
+	};
+	imgHolder.ondragend = function() {
+		this.className = "";
+		return false;
+	};
+	imgHolder.ondrop = function(e) {
+		this.className = "";
+		e.preventDefault();
+		//console.log(e.dataTransfer.files);
+		var imgFile = e.dataTransfer.files[0];
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			$scope.$apply(function () {
+				self.editCustomer.image = event.target.result;
+			});
+		};
+		reader.readAsDataURL(imgFile);
+	};
+	
 }]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

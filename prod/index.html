@@ -52,6 +52,13 @@
 						<input type="checkbox" ng-model="main.editCustomer.isPrivate">לקוח פרטי?</input>
 						<p>קוד פרטיות</p>
 						<input type="text" class="form-control" placeholder="Private code" ng-model="main.editCustomer.privateCode" ng-disabled="!main.editCustomer.isPrivate" />
+						<p>הוספת תמונה (יש לגרור):</p>
+						<div id="imgHolder">
+							<img ng-src="{{main.editCustomer.image}}" ng-show="main.editCustomer.image"></img>
+						</div>
+						<div class="text-center">
+							<div class="btn btn-danger" ng-show="main.editCustomer.image" ng-click="main.editCustomer.image = undefined">מחק תמונה</div>
+						</div>
 					</div>
 				  </div>
 				  <div class="alert alert-danger" ng-show="main.editError">
@@ -127,6 +134,7 @@
 										ng-click="main.expand(customer.appID)"
 										ng-show="customer.tenants.length > 0">
 									</span>
+									<img ng-src="{{customer.image}}" ng-show="customer.image" />
 									<span>&nbsp {{customer.name}}</span>
 								</td>
 								<td>{{customer.appID}}</td>
