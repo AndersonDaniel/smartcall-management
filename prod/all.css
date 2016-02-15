@@ -81,3 +81,8 @@ tr img {
 	width: 30px;
 	display: inline;
 }
+
+a:link, a:visited {
+	color: inherit;
+	text-decoration: inherit;
+}
