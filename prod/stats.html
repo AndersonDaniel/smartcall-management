@@ -23,11 +23,30 @@
 		<link href='https://fonts.googleapis.com/css?family=Arimo&subset=hebrew,latin' rel='stylesheet' type='text/css'>
 		
 		<script src="stats.js"></script>
+		<link rel="stylesheet" href="stats.css">
 		
 	</head>
-	<body ng-controller="statsController as stats">
+	<body ng-controller="statsController as stats" id='body'>
 		<div class="container-fluid">
-			ook
+			<table class="table table-hover table-responsive">
+				<thead>
+					<tr>
+						<th>אפליקציה</th>
+						<th>מחלקה</th>
+						<th>מספר משתמש</th>
+						<th>מועד בקשה</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="log in stats.logs | orderBy : 'when' : false">
+						<td>{{log.appName}}</td>
+						<td>{{log.tenantName}}</td>
+						<td>{{log.phone}}</td>
+						<td>{{log.when | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="btn btn-info" ng-click="stats.copy()">העתק טבלה ללוח העריכה</div>
 		</div>
 	</body>
 </html>

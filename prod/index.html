@@ -128,13 +128,13 @@
 						<tbody>
 							<tr ng-repeat-start="customer in main.customers">
 								<td>
-									<a ng-href="stats.html#?app={{customer.appID}}" target="blank">
 										<span 
 											class="glyphicon" 
 											ng-class="main.expanded[customer.appID] ? 'glyphicon-menu-down' : 'glyphicon-menu-left'" 
 											ng-click="main.expand(customer.appID)"
 											ng-show="customer.tenants.length > 0">
 										</span>
+									<a ng-href="stats.html#?app={{customer.appID}}" target="blank">
 										<img ng-src="{{customer.image}}" ng-show="customer.image" />
 										<span>&nbsp {{customer.name}}</span>
 									</a>

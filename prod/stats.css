@@ -1,0 +1,15 @@
+body {
+	font-family: "Arimo", "Tahoma";
+}
+
+h1 {
+	text-shadow: 2px 2px #111111;
+}
+
+th, td, footer {
+	text-align: center;
+}
+
+.btn {
+	width: 100%;
+}
