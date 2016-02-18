@@ -22,31 +22,56 @@
 		
 		<link href='https://fonts.googleapis.com/css?family=Arimo&subset=hebrew,latin' rel='stylesheet' type='text/css'>
 		
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		
 		<script src="stats.js"></script>
 		<link rel="stylesheet" href="stats.css">
 		
 	</head>
 	<body ng-controller="statsController as stats" id='body'>
 		<div class="container-fluid">
-			<table class="table table-hover table-responsive">
-				<thead>
-					<tr>
-						<th>אפליקציה</th>
-						<th>מחלקה</th>
-						<th>מספר משתמש</th>
-						<th>מועד בקשה</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="log in stats.logs | orderBy : 'when' : false">
-						<td>{{log.appName}}</td>
-						<td>{{log.tenantName}}</td>
-						<td>{{log.phone}}</td>
-						<td>{{log.when | date : "dd/MM/yyyy HH:mm:ss"}}</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="btn btn-info" ng-click="stats.copy()">העתק טבלה ללוח העריכה</div>
+
+			<div class="sk-circle" ng-show='!stats.logs'>
+			  <div class="sk-circle1 sk-child"></div>
+			  <div class="sk-circle2 sk-child"></div>
+			  <div class="sk-circle3 sk-child"></div>
+			  <div class="sk-circle4 sk-child"></div>
+			  <div class="sk-circle5 sk-child"></div>
+			  <div class="sk-circle6 sk-child"></div>
+			  <div class="sk-circle7 sk-child"></div>
+			  <div class="sk-circle8 sk-child"></div>
+			  <div class="sk-circle9 sk-child"></div>
+			  <div class="sk-circle10 sk-child"></div>
+			  <div class="sk-circle11 sk-child"></div>
+			  <div class="sk-circle12 sk-child"></div>
+			</div>
+		
+			<div ng-show="stats.logs">
+				<div dir='ltr'>
+					<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				</div>
+				
+				<table class="table table-hover table-responsive" ng-show="stats.logs">
+					<thead>
+						<tr>
+							<th>אפליקציה</th>
+							<th>מחלקה</th>
+							<th>מספר משתמש</th>
+							<th>מועד בקשה</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="log in stats.logs | orderBy : 'when' : false">
+							<td>{{log.appName}}</td>
+							<td>{{log.tenantName}}</td>
+							<td>{{log.phone}}</td>
+							<td>{{log.when | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn btn-info" ng-click="stats.copy()">העתק טבלה ללוח העריכה</div>
+			</div>
 		</div>
 	</body>
 </html>
