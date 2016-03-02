@@ -49,6 +49,7 @@
 						<input type="checkbox" ng-model="main.editCustomer.isPerm"> לקוח קבוע?</input>
 						<p>מספר סוכן</p>
 						<input type="text" class="form-control" placeholder="Agent extension ID" ng-model="main.editCustomer.agentExt" ng-disabled="main.editCustomer.isPerm" />
+						<input type="checkbox" ng-model="main.editCustomer.isPublic">לקוח ציבורי?</input>
 						<input type="checkbox" ng-model="main.editCustomer.isPrivate">לקוח פרטי?</input>
 						<p>קוד פרטיות</p>
 						<input type="text" class="form-control" placeholder="Private code" ng-model="main.editCustomer.privateCode" ng-disabled="!main.editCustomer.isPrivate" />
