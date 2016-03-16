@@ -31,6 +31,7 @@ smartApp.controller('statsController', ['$scope', '$location', '$filter', functi
 			$('#container').highcharts({
 				title: {
 					text: 'בקשות לשיחות מ' + self.logs[0].appName,
+					useHTML: true,
 					x: -20 //center
 				},
 				subtitle: {
@@ -119,6 +120,7 @@ smartApp.controller('statsController', ['$scope', '$location', '$filter', functi
 					if (self.logs.length > 0) {
 						setTimeout(function() {
 							self.initGraph(self.getCategories(), self.getSeries());
+							$('.highcharts-title').attr('dir', 'rtl');
 						}, 100);
 					};
 				});
