@@ -120,10 +120,10 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (self.editCustomer.isPrivate && !self.editCustomer.privateCode) {
 			return "עבור לקוח פרטי יש להגדיר קוד פרטי";
 		}
-		if (self.editCustomer.isPrivate && 
+		/*if (self.editCustomer.isPrivate && 
 			!self.editCustomer.privateCode.match(/^\d+$/)) {
 			return "קוד פרטי לא מספרי";
-		}
+		}*/
 		
 	};
 	
