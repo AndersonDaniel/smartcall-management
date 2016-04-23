@@ -157,3 +157,23 @@ a:link, a:visited {
             transform: scale3D(0, 0, 1);
   } 
 }
+
+#tenantModal tbody {
+	height: initial;
+}
+
+	#tenantModal th, td {
+		max-width: 12.5%;
+	}
+	
+	#tenantModal table input[type="text"] {
+		max-width: 100%;
+		width: 100%;
+		color: black;
+		text-align: center;
+		font-size: 0.9em;
+	}
+
+.secID {
+	font-size: 0.6em;
+}

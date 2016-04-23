@@ -2,6 +2,8 @@
 
 smartApp.controller('mainController', ['$scope', function($scope) {
 	var self = this;
+
+	self.days = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
 	
 	var myDataRef = new Firebase("https://smartcall-management.firebaseio.com/clients");
 	var myUsersRef = new Firebase("https://smartcall-management.firebaseio.com/users");
@@ -26,6 +28,46 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	  } else {
 		window.location.pathname = window.location.pathname.replace("index.html", "login.html");
 	  }
+	}
+	
+	function populateTenantWorkdays(tenant) {
+		tenant.workdays = [
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			},
+			{
+				"inactive" : true,
+				"start" : "08:00",
+				"end" : "18:00"
+			}
+		];
 	}
 	
 	myDataRef.onAuth(authDataCallback);
@@ -64,6 +106,14 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		}
 	});
 	
+	for (var i = 0; i < self.days.length; i++) {
+		$scope.$watchCollection('main.editTenant.workdays[' + i + ']', function(newValue, oldValue) {
+			if (self.tenantModal) {
+				self.editError = self.validateEditTenant();
+			}
+		});
+	}
+		
 	self.startAddCustomer = function() {
 		self.customerModal = true;
 		self.customerModalRole = "הוספת";
@@ -104,12 +154,6 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (!self.editCustomer.name) {
 			return "יש למלא שם לקוח";
 		}
-		if (!self.editCustomer.appID) {
-			return "יש למלא את מספר האפליקציה";
-		}
-		if (!self.editCustomer.appID.match(/^\d+$/)) {
-			return "מספר האפליקציה לא מספרי";
-		}
 		if (!self.editCustomer.isPerm && !self.editCustomer.agentExt) {
 			return "עבור לקוח לא קבוע יש למלא מספר נציג";
 		}
@@ -120,10 +164,6 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (self.editCustomer.isPrivate && !self.editCustomer.privateCode) {
 			return "עבור לקוח פרטי יש להגדיר קוד פרטי";
 		}
-		/*if (self.editCustomer.isPrivate && 
-			!self.editCustomer.privateCode.match(/^\d+$/)) {
-			return "קוד פרטי לא מספרי";
-		}*/
 		
 	};
 	
@@ -132,6 +172,7 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		self.tenantModalRole = "הוספת";
 		self.finalize = self.addTenant(customer);
 		self.editTenant = {};
+		populateTenantWorkdays(self.editTenant);
 	};
 	
 	self.addTenant = function(customer) {
@@ -150,6 +191,9 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		self.tenantModalRole = "עריכת";
 		self.finalize = self.finishEditTenant(tenant);
 		self.editTenant = angular.copy(tenant);
+		if (!self.editTenant.workdays) {
+			populateTenantWorkdays(self.editTenant);
+		}
 	};
 	
 	self.finishEditTenant = function(tenant) {
@@ -178,6 +222,9 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (!self.editTenant.name) {
 			return "יש למלא שם שלוחה";
 		}
+		if (!self.editTenant.appID) {
+			return "יש למלא מזהה אפליקציה";
+		}
 		if (!self.editTenant.tenantID) {
 			return "יש למלא מזהה שלוחה";
 		}
@@ -187,6 +234,16 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 		if (!self.editTenant.secID) {
 			return "יש למלא מזהה בטיחות";
 		}
+		for (var nDayIndex = 0; nDayIndex < 7; nDayIndex++) {
+			var workday = self.editTenant.workdays[nDayIndex];
+			if (!workday.inactive && !workday.allday) {
+				if (!workday.start.match(/^\d\d:\d\d$/)) {
+					return "שעת תחילת עבודה ביום " + self.days[nDayIndex] + " אינה תקינה";
+				} else if (!workday.end.match(/^\d\d:\d\d$/)) {
+					return "שעת סוף עבודה ביום " + self.days[nDayIndex] + " אינה תקינה";
+				}
+			}
+		}
 	};
 	
 	self.logout = function() {
@@ -194,8 +251,8 @@ smartApp.controller('mainController', ['$scope', function($scope) {
 	}
 	
 	self.expanded = {};
-	self.expand = function(appID) {
-		self.expanded[appID] = !self.expanded[appID];
+	self.expand = function(appIndex) {
+		self.expanded[appIndex] = !self.expanded[appIndex];
 	};
 	
 	var imgHolder = document.getElementById('imgHolder');

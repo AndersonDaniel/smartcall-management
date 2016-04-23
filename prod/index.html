@@ -44,8 +44,6 @@
 					<div>
 						<p>שם לקוח</p>
 						<input type="text" class="form-control" placeholder="שם הלקוח" ng-model="main.editCustomer.name" />
-						<p>מזהה לקוח</p>
-						<input type="text" class="form-control" placeholder="App ID" ng-model="main.editCustomer.appID" />
 						<input type="checkbox" ng-model="main.editCustomer.isPerm"> לקוח קבוע?</input>
 						<p>מספר סוכן</p>
 						<input type="text" class="form-control" placeholder="Agent extension ID" ng-model="main.editCustomer.agentExt" ng-disabled="main.editCustomer.isPerm" />
@@ -88,12 +86,44 @@
 					<div>
 						<p>שם שלוחה</p>
 						<input type="text" class="form-control" placeholder="שם השלוחה" ng-model="main.editTenant.name" />
-						<p>מזהה שלוחה</p>
-						<input type="text" class="form-control" placeholder="מזהה השלוחה" ng-model="main.editTenant.tenantID" />
+						<p>Application ID</p>
+						<input type="text" class="form-control" placeholder="Application ID" ng-model="main.editTenant.appID" />
+						<p>Tenant ID</p>
+						<input type="text" class="form-control" placeholder="Tenant ID" ng-model="main.editTenant.tenantID" />
 						<p>מזהה בטיחות</p>
 						<input type="text" class="form-control" placeholder="מזהה בטיחות" ng-model="main.editTenant.secID" />
 					</div>
 				  </div>
+				  <table class="table table-hover table-responsive" >
+					<thead>
+						<th></th>
+						<th ng-repeat="day in main.days">{{day}}</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>לא פעיל</td>
+							<td ng-repeat='workday in main.editTenant.workdays'><input type="checkbox" ng-model='workday.inactive'
+																				ng-disabled='workday.allday' /></td>
+						</tr>
+						<tr>
+							<td>24 שעות</td>
+							<td ng-repeat='workday in main.editTenant.workdays'><input type="checkbox" ng-model='workday.allday'
+																				ng-disabled='workday.inactive' /></td>
+						</tr>
+						<tr>
+							<td>תחילת יום</td>
+							<td ng-repeat='workday in main.editTenant.workdays'><input type="text" class="form-control" 
+																				ng-model="workday.start" 
+																				ng-disabled="workday.inactive || workday.allday" /></td>
+						</tr>
+						<tr>
+							<td>סוף יום</td>
+							<td ng-repeat='workday in main.editTenant.workdays'><input type="text" class="form-control"
+																				ng-model="workday.end" 
+																				ng-disabled="workday.inactive || workday.allday"/></td>
+						</tr>
+					</tbody>
+				  </table>
 				  <div class="alert alert-danger" ng-show="main.editError">
 					<p><strong>שגיאה!</strong></p>
 					<p>{{main.editError}}</p>
@@ -130,7 +160,6 @@
 					<table class="table table-hover table-responsive" ng-if="main.customers">
 						<thead>
 							<th>לקוח</th>
-							<th>מזהה לקוח</th>
 							<th>מספר סוכן</th>
 							<th>ציבורי?</th>
 							<th>פרטי?</th>
@@ -144,8 +173,8 @@
 								<td>
 										<span 
 											class="glyphicon" 
-											ng-class="main.expanded[customer.appID] ? 'glyphicon-menu-down' : 'glyphicon-menu-left'" 
-											ng-click="main.expand(customer.appID)"
+											ng-class="main.expanded[$index] ? 'glyphicon-menu-down' : 'glyphicon-menu-left'" 
+											ng-click="main.expand($index)"
 											ng-show="customer.tenants.length > 0">
 										</span>
 									<a ng-href="stats.html#?app={{customer.appID}}" target="blank">
@@ -153,7 +182,6 @@
 										<span>&nbsp {{customer.name}}</span>
 									</a>
 								</td>
-								<td>{{customer.appID}}</td>
 								<td>{{customer.agentExt}}</td>
 								<td><span class="glyphicon" ng-class="customer.isPublic ? 'glyphicon-ok' : 'glyphicon-remove'"></span></td>
 								<td><span class="glyphicon" ng-class="customer.isPrivate ? 'glyphicon-ok' : 'glyphicon-remove'"></span></td>
@@ -162,25 +190,23 @@
 								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#customerModal" ng-click="main.startEditCustomer(customer)"><span class="glyphicon glyphicon-edit"></span></div></td>
 								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeCustomer($index)"><span class="glyphicon glyphicon-erase"></span></div></td>
 							</tr>
-							<tr ng-show="main.expanded[customer.appID]" class="tenantHeader">
-								<td>&nbsp </td>
+							<tr ng-show="main.expanded[$index]" class="tenantHeader">
 								<td>&nbsp </td>
 								<td>שלוחה</td>
-								<td>מזהה</td>
+								<td>Application ID</td>
+								<td>Tenant ID</td>
 								<td>מזהה בטיחות</td>
 								<td>&nbsp </td>
 								<td>&nbsp </td>
 								<td>&nbsp </td>
-								<td>&nbsp </td>
 							</tr>
-							<tr ng-repeat-end ng-repeat="tenant in customer.tenants" ng-show="main.expanded[customer.appID]" class="tenantRow">
-								<td>&nbsp </td>
+							<tr ng-repeat-end ng-repeat="tenant in customer.tenants" ng-show="main.expanded[$parent.$index]" class="tenantRow">
 								<td>&nbsp </td>
 								<td>{{tenant.name}}</td>
+								<td>{{tenant.appID}}</td>
 								<td>{{tenant.tenantID}}</td>
-								<td>{{tenant.secID}}</td>
-								<td>&nbsp </td>
-								<td>&nbsp </td>
+								<td class="secID">{{tenant.secID}}</td>
+								<td>&nbsp</td>
 								<td><div class="btn btn-warning" title="עריכה" data-toggle="modal" data-target="#tenantModal" ng-click="main.startEditTenant(tenant)"><span class="glyphicon glyphicon-edit"></span></div></td>
 								<td><div class="btn btn-danger" title="הסרה" ng-click="main.removeTenant(customer, $index)"><span class="glyphicon glyphicon-erase"></span></div></td></td>
 							</tr>
