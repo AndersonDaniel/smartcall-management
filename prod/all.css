@@ -177,3 +177,25 @@ a:link, a:visited {
 .secID {
 	font-size: 0.6em;
 }
+
+.tester {
+	background: white;
+	margin: 2em auto;
+	width: 80px;
+	height: 80px;
+	border: 2px solid black;
+	border-radius: 50%;
+	padding: 12px;
+}
+
+.tester img {
+	max-width: 100%;
+}
+
+.no-edge {
+	padding: 2px;
+}
+
+.no-edge img {
+	border-radius: 50%;
+}

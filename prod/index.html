@@ -58,6 +58,15 @@
 						<div class="text-center">
 							<div class="btn btn-danger" ng-show="main.editCustomer.image" ng-click="main.editCustomer.image = undefined">מחק תמונה</div>
 						</div>
+						<div class="text-center" ng-show="main.editCustomer.image">
+							<input type="checkbox" ng-model="main.editCustomer.hideEdge"> ללא שוליים</input>
+						</div>
+						<div class="tester" ng-class="main.editCustomer.hideEdge ? 'no-edge' : '' " ng-show="main.editCustomer.image">
+							<img ng-src="{{main.editCustomer.image}}"></img>
+						</div>
+						<div class="text-center" ng-show="main.editCustomer.image">
+							<p>תצוגה מקדימה</p>
+						</div>
 					</div>
 				  </div>
 				  <div class="alert alert-danger" ng-show="main.editError">
