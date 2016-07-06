@@ -114,7 +114,7 @@ smartApp.controller('statsController', ['$scope', '$location', '$filter', functi
 			if (snapshot.val()){
 				$scope.$apply(function(){
 					self.logs = snapshot.val().filter(function(row) {
-						return (row.appID == self.displayID);
+						return (row.appName == self.displayID);
 					});	
 					
 					if (self.logs.length > 0) {
